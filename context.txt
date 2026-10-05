@@ -1,0 +1,42 @@
+{
+  "full_name": "Oyenekan Oluwapelumi Emmanuel",
+  "user_information": "Full-stack software developer with 3-4 years of experience building production-ready web applications, REST APIs, e-commerce platforms, and admin dashboards. Currently working at Deus Studio (2026–Present), freelancing (2023–Present), and developing for Tabbiebakes (2025–Present). Expanding expertise into mobile application development. Built 'Cortex' (mind mapping tool) and 'Elucid' (AI post generator). Contact: www.oyenekanemmanuel.xyz | github.com/Elite-Dev-Repo | linkedin.com/in/oyenekan-emmanuel",
+  "education": {
+    "institution": "Lagos State University – Ojo",
+    "field": "Philosophy",
+    "duration": "2022–2026"
+  },
+  "skills": [
+    "HTML/CSS",
+    "TailwindCSS",
+    "ShadCn",
+    "ChartJS",
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Next.js",
+    "Python",
+    "Django",
+    "Django Rest Framework",
+    "PostgreSQL",
+    "SQLite",
+    "MySQL",
+    "Git",
+    "GitHub",
+    "VSCode",
+    "Postman",
+    "PGAdmin",
+    "Playwright",
+    "Celery",
+    "Redis",
+    "Antigravity",
+    "OpenCode",
+    "Codex",
+    "API Development",
+    "Frontend Development",
+    "Backend Development",
+    "Reactflow",
+    "LinkedIn OAuth"
+  ],
+  "hobbies": []
+}
