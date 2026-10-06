@@ -10,11 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
-import dj_database_url
-from pathlib import Path
-from dotenv import load_dotenv
 import os
 from datetime import timedelta
+from pathlib import Path
+import dj_database_url
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -26,12 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-fallback-key-change-in-prod")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", False)
+DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "t")
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', ".vercel.app"]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -56,8 +56,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'dj_rest_auth',
     'dj_rest_auth.registration',
-    'cryptography',
-
 ]
 
 MIDDLEWARE = [
@@ -116,7 +114,6 @@ SOCIALACCOUNT_PROVIDERS = {
         'AUTH_PARAMS': {'access_type': 'online'},
     }
 }
-# IF YOU ARE USING A CUSTOM USER MODEL WITH EMAIL AUTH ADD THIS
 
 # Configure django-allauth to use email instead of usernames
 ACCOUNT_LOGIN_METHODS = {'email'}
@@ -124,7 +121,6 @@ ACCOUNT_SIGNUP_FIELDS = ['email', 'password1', 'password2']
 
 # Ensure allauth doesn't look for a username field during registration
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-
 
 
 REST_FRAMEWORK = {
@@ -144,21 +140,23 @@ SIMPLE_JWT = {
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv("DATABASE_URL", ""),
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
-}
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -198,9 +196,6 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 AUTH_USER_MODEL = 'core.User'
-
-# Allow Django to accept requests targeted at any domain name
-ALLOWED_HOSTS = ['*']
 
 # Ensure your CORS settings still allow your frontend to read the data
 CORS_ALLOW_ALL_ORIGINS = True
