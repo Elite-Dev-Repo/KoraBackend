@@ -33,6 +33,10 @@ DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "t")
 
 ALLOWED_HOSTS = ['*']
 
+# Honor HTTPS when running behind a prod proxy (Render / Railway / Heroku)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+
 
 # Application definition
 
@@ -100,13 +104,14 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# Google settings
+# Google settings — accept either GOOGLE_* or OAUTH_* env names
+# (.env historically used OAUTH_CLIENT_ID / OAUTH_CLIENT_SECRET)
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APPS': [
             {
-                'client_id': os.getenv('GOOGLE_CLIENT_ID', ''),
-                'secret': os.getenv('GOOGLE_CLIENT_SECRET', ''),
+                'client_id': os.getenv('GOOGLE_CLIENT_ID') or os.getenv('OAUTH_CLIENT_ID', ''),
+                'secret': os.getenv('GOOGLE_CLIENT_SECRET') or os.getenv('OAUTH_CLIENT_SECRET', ''),
                 'key': '',
             },
         ],
@@ -117,7 +122,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # Configure django-allauth to use email instead of usernames
 ACCOUNT_LOGIN_METHODS = {'email'}
-ACCOUNT_SIGNUP_FIELDS = ['email', 'password1', 'password2']
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 
 # Ensure allauth doesn't look for a username field during registration
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
@@ -194,6 +199,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 AUTH_USER_MODEL = 'core.User'
 
