@@ -6,7 +6,8 @@ from asgiref.sync import sync_to_async
 from dotenv import load_dotenv
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openrouter import ChatOpenRouter
+# from langchain_openrouter import ChatOpenRouter
+from langchain_groq import ChatGroq
 
 from core.models import UserInfo
 
@@ -14,13 +15,13 @@ load_dotenv()
 
 
 def get_llm():
-    api_key = os.getenv("GOOGLE_GEMINI_API_KEY_CHAT_AGENT")
+    api_key = os.getenv("GROQ_API_KEY_AGENT")
 
     if not api_key:
         raise ValueError("API_KEY is missing")
   
-    return ChatGoogleGenerativeAI(
-        model="gemini-3.7-flash",
+    return ChatGroq(
+        model="qwen/qwen3.8-27b",
         api_key=api_key,
     )
 
